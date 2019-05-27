@@ -1,38 +1,96 @@
-/* Using useRef and useEffect to target a DOM node */
-import React, {useRef, useEffect} from 'react'
-import VanillaTilt from 'vanilla-tilt'
-import './App.css'
+/* Stop watch */
+import React, {useState} from 'react'
 
-function Tilt(props) {
-  const tiltRef = useRef()
-  useEffect(() => {
-    VanillaTilt.init(tiltRef.current, {
-      max: 25,
-      speed: 400,
-      glare: true,
-      'max-glare': 0.5,
-    })
-    return () => tiltRef.current.vanillaTilt.destroy()
-  }, [])
-  
+function Stopwatch() {
+  const [lapse, setLapse] = useState(0)
+  const [running, setRunning] = useState(false)
+
+  function handleRunClick() {
+    if  (running) {
+      // do something
+    } else {
+      const startTime = Date.now() - lapse
+      setInterval(() => {
+        setLapse(Date.now() - startTime)
+      }, 0)
+    }
+    setRunning(!running)
+  }
+
   return (
-    <div ref={tiltRef} className='tilt-root'>
-      <div className='tilt-child'>{props.children}</div>
+    <div style={{textAlign: 'center'}}>
+      <label
+        style={{
+          fontSize: '5rem',
+          display: 'block',
+        }}
+      >
+        {lapse}
+        ms
+      </label>
+      <button
+        onClick={handleRunClick} 
+        style={buttonStyles}
+      >
+        {running ? 'Stop' : 'Start'}
+      </button>
+      <button style={buttonStyles}>Clear</button>
     </div>
   )
 }
 
+const buttonStyles = {
+  border: '1px solid #ccc',
+  background: '#fff',
+  fontSize: '2em',
+  padding: 15,
+  margin: 5,
+  width: 200,
+  outline: 0,
+}
+
+
 function App() {
-  return (
-    <div className='totally-centered'>
-      <Tilt>
-        <div className='totally-centered'>vanilla-tilt.js</div>
-      </Tilt>
-    </div>
-  )
+  return <Stopwatch />
 }
 
 export default App;
+
+/* Using useRef and useEffect to target a DOM node */
+// import React, {useRef, useEffect} from 'react'
+// import VanillaTilt from 'vanilla-tilt'
+// import './App.css'
+
+// function Tilt(props) {
+//   const tiltRef = useRef()
+//   useEffect(() => {
+//     VanillaTilt.init(tiltRef.current, {
+//       max: 25,
+//       speed: 400,
+//       glare: true,
+//       'max-glare': 0.5,
+//     })
+//     return () => tiltRef.current.vanillaTilt.destroy()
+//   }, [])
+  
+//   return (
+//     <div ref={tiltRef} className='tilt-root'>
+//       <div className='tilt-child'>{props.children}</div>
+//     </div>
+//   )
+// }
+
+// function App() {
+//   return (
+//     <div className='totally-centered'>
+//       <Tilt>
+//         <div className='totally-centered'>vanilla-tilt.js</div>
+//       </Tilt>
+//     </div>
+//   )
+// }
+
+// export default App;
 
 /* Using useEffect to save state with localStorage */
 // import React, {useState, useEffect} from 'react';
