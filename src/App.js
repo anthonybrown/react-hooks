@@ -1,16 +1,17 @@
 /* Stop watch */
-import React, {useState} from 'react'
+import React, {useState, useRef} from 'react'
 
 function Stopwatch() {
   const [lapse, setLapse] = useState(0)
   const [running, setRunning] = useState(false)
+  const intervalRef = useRef(null)
 
   function handleRunClick() {
     if  (running) {
-      // do something
+      clearInterval(intervalRef.current)
     } else {
       const startTime = Date.now() - lapse
-      setInterval(() => {
+      intervalRef.current = setInterval(() => {
         setLapse(Date.now() - startTime)
       }, 0)
     }
@@ -25,8 +26,7 @@ function Stopwatch() {
           display: 'block',
         }}
       >
-        {lapse}
-        ms
+        {lapse} ms
       </label>
       <button
         onClick={handleRunClick} 
