@@ -1,10 +1,14 @@
 /* Stop watch */
-import React, {useState, useRef} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 
 function Stopwatch() {
   const [lapse, setLapse] = useState(0)
   const [running, setRunning] = useState(false)
   const intervalRef = useRef(null)
+
+  useEffect(() => {
+    return () => clearInterval(intervalRef.current)
+  }, [])
 
   function handleRunClick() {
     if  (running) {
