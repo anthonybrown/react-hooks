@@ -1,3 +1,4 @@
+/* Using useRef and useEffect to target a DOM node */
 import React, {useRef, useEffect} from 'react'
 import VanillaTilt from 'vanilla-tilt'
 import './App.css'
@@ -13,6 +14,7 @@ function Tilt(props) {
     })
     return () => tiltRef.current.vanillaTilt.destroy()
   }, [])
+  
   return (
     <div ref={tiltRef} className='tilt-root'>
       <div className='tilt-child'>{props.children}</div>
@@ -30,7 +32,7 @@ function App() {
   )
 }
 
-
+export default App;
 
 /* Using useEffect to save state with localStorage */
 // import React, {useState, useEffect} from 'react';
@@ -77,4 +79,3 @@ function App() {
 //   );
 // }
 
-export default App;
