@@ -18,6 +18,12 @@ function Stopwatch() {
     setRunning(!running)
   }
 
+  function handleClearClick() {
+    clearInterval(intervalRef.current)
+    setLapse(0)
+    setRunning(false)
+  }
+
   return (
     <div style={{textAlign: 'center'}}>
       <label
@@ -34,7 +40,12 @@ function Stopwatch() {
       >
         {running ? 'Stop' : 'Start'}
       </button>
-      <button style={buttonStyles}>Clear</button>
+      <button
+        onClick={handleClearClick} 
+        style={buttonStyles}
+      >
+          Clear
+      </button>
     </div>
   )
 }
