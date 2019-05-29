@@ -1,9 +1,39 @@
-/* Stop watch */
-import React, {useState, useRef, useEffect} from 'react'
+/* Stop watch, using useReducer over useState */
+
+// In more complex complex components, having a useState for 
+// every item of state in the component might be a little bit much.
+// The useReducer hook let's us use a reducer like in Redux.
+import React, {useReducer, useRef, useEffect} from 'react'
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'LAPSE':
+      return {
+        ...state,
+        lapse: action.now - action.startTime,
+      }
+    case 'TOGGLE_RUNNING':
+      return {
+        ...state,
+        running: !state.running,
+      }
+    case 'CLEAR':
+      return {
+        ...state,
+        running: false,
+        lapse: 0,
+      }
+    default:
+      return state
+  }
+}
 
 function Stopwatch() {
-  const [lapse, setLapse] = useState(0)
-  const [running, setRunning] = useState(false)
+  const [{running, lapse}, dispatch] = useReducer(reducer, {
+    running: false,
+    lapse: 0,
+  })
+  
   const intervalRef = useRef(null)
 
   useEffect(() => {
@@ -11,23 +41,22 @@ function Stopwatch() {
   }, [])
 
   function handleRunClick() {
-    if  (running) {
+    if (running) {
       clearInterval(intervalRef.current)
     } else {
       const startTime = Date.now() - lapse
       intervalRef.current = setInterval(() => {
-        setLapse(Date.now() - startTime)
+        dispatch({type: 'LAPSE', now: Date.now(), startTime})
       }, 0)
     }
-    setRunning(!running)
+    dispatch({type: 'TOGGLE_RUNNING'})
   }
 
   function handleClearClick() {
     clearInterval(intervalRef.current)
-    setLapse(0)
-    setRunning(false)
+    dispatch({type: 'CLEAR'})
   }
-
+  
   return (
     <div style={{textAlign: 'center'}}>
       <label
@@ -70,6 +99,79 @@ function App() {
 }
 
 export default App;
+
+
+// import React, {useState, useRef, useEffect} from 'react'
+
+// function Stopwatch() {
+//   const [lapse, setLapse] = useState(0)
+//   const [running, setRunning] = useState(false)
+//   const intervalRef = useRef(null)
+
+//   useEffect(() => {
+//     return () => clearInterval(intervalRef.current)
+//   }, [])
+
+//   function handleRunClick() {
+//     if  (running) {
+//       clearInterval(intervalRef.current)
+//     } else {
+//       const startTime = Date.now() - lapse
+//       intervalRef.current = setInterval(() => {
+//         setLapse(Date.now() - startTime)
+//       }, 0)
+//     }
+//     setRunning(!running)
+//   }
+
+//   function handleClearClick() {
+//     clearInterval(intervalRef.current)
+//     setLapse(0)
+//     setRunning(false)
+//   }
+
+//   return (
+//     <div style={{textAlign: 'center'}}>
+//       <label
+//         style={{
+//           fontSize: '5rem',
+//           display: 'block',
+//         }}
+//       >
+//         {lapse} ms
+//       </label>
+//       <button
+//         onClick={handleRunClick} 
+//         style={buttonStyles}
+//       >
+//         {running ? 'Stop' : 'Start'}
+//       </button>
+//       <button
+//         onClick={handleClearClick} 
+//         style={buttonStyles}
+//       >
+//           Clear
+//       </button>
+//     </div>
+//   )
+// }
+
+// const buttonStyles = {
+//   border: '1px solid #ccc',
+//   background: '#fff',
+//   fontSize: '2em',
+//   padding: 15,
+//   margin: 5,
+//   width: 200,
+//   outline: 0,
+// }
+
+
+// function App() {
+//   return <Stopwatch />
+// }
+
+// export default App;
 
 /* Using useRef and useEffect to target a DOM node */
 // import React, {useRef, useEffect} from 'react'
