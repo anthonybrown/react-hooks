@@ -7,7 +7,7 @@
     "react": "16.8.3",
     "react-cache": "2.0.0-alpha.1",
     "react-dom": "16.8.3",
-    "react-scripts": "2.1.5",
+    "react-scripts": "5.0.1",
     "react-testing-library": "6.0.0",
     "vanilla-tilt": "1.6.1"
   },
